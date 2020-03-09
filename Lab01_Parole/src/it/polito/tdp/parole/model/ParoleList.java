@@ -3,11 +3,11 @@ package it.polito.tdp.parole.model;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Parole {
+public class ParoleList {
 	
 	private List<String> parole;
 		
-	public Parole() {
+	public ParoleList() {
 		parole=new LinkedList<String>();
 	}
 	
