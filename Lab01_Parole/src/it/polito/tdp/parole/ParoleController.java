@@ -21,6 +21,7 @@ public class ParoleController {
 	
 	Parole elenco ;
 	String selezionato;
+	Long inizio;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -42,10 +43,14 @@ public class ParoleController {
     
     @FXML
     private Button btnCancella;
+    
+    @FXML
+    private TextArea txtTempi;
 
     @FXML
     void doInsert(ActionEvent event) {
     	// TODO
+    	inizio=System.nanoTime();
     	if(txtParola.getText().isEmpty()) {
     		return;
     	}
@@ -57,18 +62,22 @@ public class ParoleController {
     	for(String s: elenco.getElenco())
     		parole+=s+"\n";
     	txtResult.appendText(parole);
+    	txtTempi.appendText("Inserimento: "+(System.nanoTime()-inizio)+"\n");
     }
     
     @FXML
     void doReset(ActionEvent event) {
     	// TODO
+    	inizio=System.nanoTime();
     	elenco.reset();
     	txtResult.clear();
     	txtParola.clear();
+    	txtTempi.appendText("Reset: "+(System.nanoTime()-inizio)+"\n");
     }
     
     @FXML
     void doCancella(ActionEvent event) {
+    	inizio=System.nanoTime();
     	if(selezionato.isEmpty()) {
     		return;
     	}
@@ -80,13 +89,14 @@ public class ParoleController {
     	for(String s: elenco.getElenco())
     		parole+=s+"\n";
     	txtResult.appendText(parole);
+    	txtTempi.appendText("Cancella: "+(System.nanoTime()-inizio)+"\n");
     }
     
     @FXML
     void doSelezione(MouseEvent event) {
-    	
+    
     	selezionato=txtResult.getSelectedText();
-
+    
     }
 
     @FXML
@@ -96,7 +106,8 @@ public class ParoleController {
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Parole.fxml'.";
         assert btnCancella != null : "fx:id=\"btnCancella\" was not injected: check your FXML file 'Parole.fxml'.";
         assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Parole.fxml'.";
-
+        assert txtTempi != null : "fx:id=\"txtTempi\" was not injected: check your FXML file 'Parole.fxml'.";
+        
         elenco = new Parole() ;
         selezionato=new String();
         
