@@ -41,11 +41,25 @@ public class ParoleController {
     @FXML
     void doInsert(ActionEvent event) {
     	// TODO
+    	if(txtParola.getText()==null) {
+    		return;
+    	}
+    		
+    	elenco.addParola(txtParola.getText());
+    	txtParola.clear();
+    	txtResult.clear();
+    	String parole=new String();
+    	for(String s: elenco.getElenco())
+    		parole+=s+"\n";
+    	txtResult.appendText(parole);
     }
     
     @FXML
     void doReset(ActionEvent event) {
     	// TODO
+    	elenco.reset();
+    	txtResult.clear();
+    	txtParola.clear();
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
