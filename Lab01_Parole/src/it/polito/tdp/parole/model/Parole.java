@@ -24,4 +24,9 @@ public class Parole {
 		parole.clear();
 	}
 
+	public void delParola(String selezionato) {
+		// TODO Auto-generated method stub
+		parole.remove(selezionato);
+	}
+
 }
