@@ -5,8 +5,7 @@ package it.polito.tdp.parole;
  */
 
 
-import it.polito.tdp.parole.model.ParoleList;
-import it.polito.tdp.parole.model.ParoleArray;
+import it.polito.tdp.parole.model.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,11 +18,11 @@ import javafx.scene.input.MouseEvent;
 
 public class ParoleController {
 	
-	ParoleList elencoList;
-	ParoleArray elencoArray;
+	Parole[] elenco;
 	String selezionato;
-	Long tempoList;
-	Long tempoArray;
+	Long[] tempo;
+	TextArea[] txtRisultati;
+	TextArea[] txtTempi;
 
 	 @FXML
 	    private ResourceBundle resources;
@@ -61,109 +60,75 @@ public class ParoleController {
 
     @FXML
     void doInsert(ActionEvent event) {
-    	// TODO
-    	tempoList=System.nanoTime();
     	if(txtParola.getText().isEmpty()) {
     		return;
     	}
-    		
-    	elencoList.addParola(txtParola.getText());
     	
-    	txtResultList.clear();
-    	String parole=new String();
-    	for(String s: elencoList.getElenco())
-    		parole+=s+"\n";
-    	txtResultList.appendText(parole);
-    	tempoList=System.nanoTime()-tempoList;
-    	txtTempiList.appendText("Inserimento: "+tempoList+"\n");
-    	
-    	
-    	tempoArray=System.nanoTime();
-    	if(txtParola.getText().isEmpty()) {
-    		return;
+    	for(int i=0; i<elenco.length; i++) {
+    		tempo[i]=System.nanoTime();
+    		elenco[i].addParola(txtParola.getText());
+    		String parole=new String();
+    		for(String s: elenco[i].getElenco())
+    			parole+=s+"\n";
+    		txtRisultati[i].clear();
+    		txtRisultati[i].appendText(parole);
+    		tempo[i]=System.nanoTime()-tempo[i];
+    		txtTempi[i].appendText("Inserimento: "+tempo[i]+"\n");
     	}
-    		
-    	elencoArray.addParola(txtParola.getText());
     	
-    	txtResultArray.clear();
-    	parole=new String();
-    	for(String s: elencoArray.getElenco())
-    		parole+=s+"\n";
-    	txtResultArray.appendText(parole);
-    	tempoArray=System.nanoTime()-tempoArray;
-    	txtTempiArray.appendText("Inserimento: "+tempoArray+"\n");
-    	
-    	this.confronto(tempoList,tempoArray);
+    	this.confronto(tempo);
     	
     	txtParola.clear();
     }
     
-    private void confronto(Long tempoList, Long tempoArray) {
-		// TODO Auto-generated method stub
+    
+    void confronto(Long[] tempo) {
     	txtConfronto.clear();
-    	if(tempoList<tempoArray)
+    	if(tempo[0]<tempo[1])
     		txtConfronto.appendText("List più veloce");
-    	else if(tempoArray<tempoList)
+    	else if(tempo[1]<tempo[0])
     		txtConfronto.appendText("Array più veloce");
     	else
     		txtConfronto.appendText("Stessa velocità");
 	}
 
-	@FXML
+	
+    @FXML
     void doReset(ActionEvent event) {
-    	// TODO
 		txtParola.clear();
-    	tempoList=System.nanoTime();
-    	elencoList.reset();
-    	txtResultList.clear();
-    	tempoList=System.nanoTime()-tempoList;
-    	txtTempiList.appendText("Reset: "+tempoList+"\n");
-    	
-    	
-    	tempoArray=System.nanoTime();
-    	elencoArray.reset();
-    	txtResultArray.clear();
-    	tempoArray=System.nanoTime()-tempoArray;
-    	txtTempiArray.appendText("Reset: "+tempoArray+"\n");
-    	
-    	this.confronto(tempoList, tempoArray);
+		for(int i=0; i<elenco.length; i++) {
+    		tempo[i]=System.nanoTime();
+			elenco[i].reset();
+    		txtRisultati[i].clear();
+    		tempo[i]=System.nanoTime()-tempo[i];
+    		txtTempi[i].appendText("Reset: "+tempo[i]+"\n");
+    	}
+    	this.confronto(tempo);
     }
+    
     
     @FXML
     void doCancella(ActionEvent event) {
     	txtParola.clear();
-    	tempoList=System.nanoTime();
     	if(selezionato.isEmpty()) {
     		return;
     	}
-    		
-    	elencoList.delParola(selezionato);
-    	txtResultList.clear();
-    	String parole=new String();
-    	for(String s: elencoList.getElenco())
-    		parole+=s+"\n";
-    	txtResultList.appendText(parole);
-    	tempoList=System.nanoTime()-tempoList;
-    	txtTempiList.appendText("Cancella: "+tempoList+"\n");
-    	
-    	
-    	tempoArray=System.nanoTime();
-    	if(selezionato.isEmpty()) {
-    		return;
+    	for(int i=0; i<elenco.length; i++) {
+    		tempo[i]=System.nanoTime();
+    		elenco[i].delParola(selezionato);
+    		String parole=new String();
+    		for(String s: elenco[i].getElenco())
+    			parole+=s+"\n";
+    		txtRisultati[i].clear();
+    		txtRisultati[i].appendText(parole);
+    		tempo[i]=System.nanoTime()-tempo[i];
+    		txtTempi[i].appendText("Cancella: "+tempo[i]+"\n");
     	}
-    		
-    	elencoArray.delParola(selezionato);
-    	txtResultArray.clear();
-    	parole=new String();
-    	for(String s: elencoArray.getElenco())
-    		parole+=s+"\n";
-    	txtResultArray.appendText(parole);
-    	tempoArray=System.nanoTime()-tempoArray;
-    	txtTempiArray.appendText("Cancella: "+tempoArray+"\n");
     	
-    	this.confronto(tempoList, tempoArray);
+    	this.confronto(tempo);
     	
     }
+    
     
     @FXML
     void doSelezione(MouseEvent event) {
@@ -174,6 +139,7 @@ public class ParoleController {
     		selezionato=txtResultArray.getSelectedText();
     }
 
+    
     @FXML
     void initialize() {
     	assert txtParola != null : "fx:id=\"txtParola\" was not injected: check your FXML file 'Parole.fxml'.";
@@ -185,12 +151,20 @@ public class ParoleController {
         assert txtConfronto != null : "fx:id=\"txtConfronto\" was not injected: check your FXML file 'Parole.fxml'.";
         assert btnCancella != null : "fx:id=\"btnCancella\" was not injected: check your FXML file 'Parole.fxml'.";
         assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Parole.fxml'.";
-
-        
-        elencoList = new ParoleList() ;
-        elencoArray=new ParoleArray();
+ 
         selezionato=new String();
-        
+       
+        // [0] per List e [1] per array
+        elenco=new Parole[2];
+        elenco[0] = new ParoleList();
+        elenco[1]=new ParoleArray();
+        tempo=new Long[2];
+        txtRisultati=new TextArea[2];
+        txtRisultati[0]=txtResultList;
+        txtRisultati[1]=txtResultArray;
+        txtTempi=new TextArea[2];
+        txtTempi[0]=txtTempiList;
+        txtTempi[1]=txtTempiArray;
         
     }
 }
